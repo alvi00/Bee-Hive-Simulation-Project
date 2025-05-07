@@ -1,0 +1,6 @@
+parameter,value
+num_bees,5
+sim_length,10
+comm_prob,0.7
+nectar_amount,100
+strategy_type,random
