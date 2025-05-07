@@ -1,3 +1,9 @@
+<<<<<<< HEAD
+=======
+
+
+
+>>>>>>> fb4ebf3c8020050de0784f293c106950d37f78e7
 ````markdown
 # 🐝 Bee Hive Simulation Project
 
