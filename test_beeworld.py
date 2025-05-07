@@ -80,24 +80,37 @@ class TestBeeWorld(unittest.TestCase):
         # Assert the bee targets the known nectar location
         self.assertEqual(self.bee.target, (10, 10), "Bee should target known nectar with random strategy")
         
+        # Simulate nectar collection and return to hive to trigger sharing
         hive_memory = []  # Initialize empty hive memory
-        # Simulate timestep with 'intelligent' strategy and 100% communication probability
+        self.bee.inhive = False  # Move bee outside the hive
+        self.bee.on_mission = True  # Start a mission
+        self.bee.pos = (10, 10)  # Position bee on the flower to collect nectar
         self.bee.step_change(
             None, self.world, self.hive_pos, self.flowers, self.trees, self.barriers, 1.0, 'intelligent',
             hive_memory, [self.bee]
-        )
+        )  # Bee collects nectar
+        # Simulate return to hive
+        self.bee.pos = self.hive_pos  # Move bee back to hive position
+        self.bee.step_change(
+            None, self.world, self.hive_pos, self.flowers, self.trees, self.barriers, 1.0, 'intelligent',
+            hive_memory, [self.bee]
+        )  # This should trigger sharing to hive_memory
         # Assert the known nectar location is added to hive memory
         self.assertIn((10, 10), hive_memory, "Intelligent strategy should update hive memory")
 
-        # Move bee to flower and collect nectar
-        self.bee.pos = (10, 10)  # Position bee on the flower
+        # Test nectar accumulation with random strategy
+        self.bee.pos = (10, 10)  # Position bee on the flower again
         self.bee.inhive = False  # Move bee outside the hive
         self.bee.on_mission = True  # Start a mission
-        self.bee.step_change(
+        self.bee.carrying_nectar = 0  # Reset carrying nectar
+        self.bee.total_nectar = 0  # Reset total nectar
+        # Ensure nectar collection by calling step_change
+        nectar_collected = self.bee.step_change(
             None, self.world, self.hive_pos, self.flowers, self.trees, self.barriers, 1.0, 'random'
         )
         # Assert the bee has accumulated nectar in its total
         self.assertGreater(self.bee.total_nectar, 0, "Bee should accumulate total_nectar after collecting")
+        self.assertEqual(nectar_collected, 10, "Bee should collect 10 nectar from the flower")
 
 
 if __name__ == '__main__':

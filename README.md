@@ -1,7 +1,3 @@
-Sure thing! Here's your project documentation formatted in Markdown (`.md`) style, ready to drop into a `README.md` or report file:
-
----
-
 ````markdown
 # 🐝 Bee Hive Simulation Project
 
